@@ -24,16 +24,16 @@ const handleGameOver = () => {
 
 const changeDirection = (e) => {
   // changing velocity value based on key press
-  if (e.key === "ArrowUp" || e.key === "w") {
+  if (e.key === "ArrowUp" || (e.key === "w" && velocityY != 1)) {
     velocityX = 0;
     velocityY = -1;
-  } else if (e.key === "ArrowDown" || e.key === "s") {
+  } else if (e.key === "ArrowDown" || (e.key === "s" && velocityY != -1)) {
     velocityX = 0;
     velocityY = 1;
-  } else if (e.key === "ArrowLeft" || e.key === "a") {
+  } else if (e.key === "ArrowLeft" || (e.key === "a" && velocityX != 1)) {
     velocityX = -1;
     velocityY = 0;
-  } else if (e.key === "ArrowRight" || e.key === "d") {
+  } else if (e.key === "ArrowRight" || (e.key === "d" && velocityX != -1)) {
     velocityX = 1;
     velocityY = 0;
   }
@@ -70,6 +70,15 @@ const initGame = () => {
   for (let i = 0; i < sankeBody.length; i++) {
     // Adding a div for each paet of the sanke's body
     htmlMarkup += `<div class="head" style="grid-area: ${sankeBody[i][1]} / ${sankeBody[i][0]}"></div>`;
+
+    // check if the snakehit the body
+    if (
+      i !== 0 &&
+      (sankeBody[0][1] === sankeBody[i][1]) &
+        (sankeBody[0][0] === sankeBody[i][0])
+    ) {
+      gameOver = true;
+    }
   }
   playBoard.innerHTML = htmlMarkup;
 };
