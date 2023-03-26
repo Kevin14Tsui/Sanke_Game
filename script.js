@@ -1,4 +1,7 @@
 const playBoard = document.querySelector(".play-board");
+const scoreElement = document.querySelector(".score");
+const highScoreElement = document.querySelector(".high-score");
+const controls = document.querySelectorAll(".controls i");
 
 let gameOver = false;
 let foodX, foodY;
@@ -8,6 +11,10 @@ let sankeBody = [];
 let velocityX = 0,
   velocityY = 0;
 let setIntervalId;
+let score = 0;
+// Getting high score from the local storage
+let highScore = localStorage.getItem("high-score") || 0;
+highScoreElement.innerText = `High Score: ${highScore}`;
 
 //   rondom food position
 const changeFoodPosition = () => {
@@ -37,8 +44,14 @@ const changeDirection = (e) => {
     velocityX = 1;
     velocityY = 0;
   }
-  initGame();
 };
+
+controls.forEach((key) => {
+  //Calling chaneDirection on each key click and passing key dataset value as an object
+  key.addEventListener("click", () =>
+    changeDirection({ key: key.dataset.key })
+  );
+});
 
 const initGame = () => {
   if (gameOver) return handleGameOver();
@@ -48,7 +61,12 @@ const initGame = () => {
   if (snakeX === foodX && snakeY === foodY) {
     changeFoodPosition();
     sankeBody.push([foodX, foodY]); //Pushing food position to sanke body array
-    console.log(sankeBody);
+    score++;
+
+    highScore = score >= highScore ? score : highScore;
+    localStorage.setItem("high-score", highScore);
+    scoreElement.innerText = `Score: ${score}`;
+    highScoreElement.innerText = `High Score: ${highScore}`;
   }
 
   for (let i = sankeBody.length - 1; i > 0; i--) {
